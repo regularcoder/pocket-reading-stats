@@ -4,7 +4,8 @@ import Header from '@components/Header'
 import Footer from '@components/Footer'
 import Cookies from 'cookies'
 
-export default function Home({ consumer_key }) {
+export default function Home() {
+
   return (
     <div className="container">
       <Head>
@@ -17,7 +18,7 @@ export default function Home({ consumer_key }) {
         <p className="description">
           
         <Link href="/start-auth">
-          <a>Authorise using {consumer_key}</a>
+          <a>Authorise</a>
         </Link>
         </p>
       </main>
@@ -30,18 +31,16 @@ export async function getServerSideProps({ req, res }) {
   const cookies = new Cookies(req, res);
   const code = cookies.get('access-token');
 
-  // if (!code) {
-  //   return {
-  //     redirect: {
-  //       destination: '/start-auth',
-  //       permanent: false,
-  //     },
-  //   }
-  // }
-
-  console.log(req.protocol);
+  if (!code) {
+    return {
+      redirect: {
+        destination: '/start-auth',
+        permanent: false,
+      },
+    }
+  }
 
   return {
-    props: { consumer_key: process.env.URL ?? "" },
+    props: {},
   }
 }
