@@ -39,7 +39,9 @@ export async function getServerSideProps({ req, res }) {
   //   }
   // }
 
+  console.log(req.protocol);
+
   return {
-    props: { consumer_key: process.env.POCKET_CONSUMER_KEY },
+    props: { consumer_key: process.env.URL ?? "" },
   }
 }
