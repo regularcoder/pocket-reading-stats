@@ -4,7 +4,7 @@ import Header from '@components/Header'
 import Footer from '@components/Footer'
 import Cookies from 'cookies'
 
-export default function Home() {
+export default function Home({ consumer_key }) {
   return (
     <div className="container">
       <Head>
@@ -17,7 +17,7 @@ export default function Home() {
         <p className="description">
           
         <Link href="/start-auth">
-          <a>Authorise using ${process.env.POCKET_CONSUMER_KEY}</a>
+          <a>Authorise using {consumer_key}</a>
         </Link>
         </p>
       </main>
@@ -39,9 +39,7 @@ export async function getServerSideProps({ req, res }) {
   //   }
   // }
 
-
-
   return {
-    props: {}, // will be passed to the page component as props
+    props: { consumer_key: process.env.POCKET_CONSUMER_KEY },
   }
 }

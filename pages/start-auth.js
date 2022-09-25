@@ -5,7 +5,7 @@ import Cookies from 'cookies'
 
 const REDIRECT_URI = 'http://localhost:3000/finish-auth';
 
-export default function StartAuth({ code }) {
+export default function StartAuth() {
   return (
     <div className="container">
       <Head>
