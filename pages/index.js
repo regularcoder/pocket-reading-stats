@@ -17,7 +17,7 @@ export default function Home() {
         <p className="description">
           
         <Link href="/start-auth">
-          <a>Authorise</a>
+          <a>Authorise using ${process.env.POCKET_CONSUMER_KEY}</a>
         </Link>
         </p>
       </main>
@@ -30,14 +30,14 @@ export async function getServerSideProps({ req, res }) {
   const cookies = new Cookies(req, res);
   const code = cookies.get('access-token');
 
-  if (!code) {
-    return {
-      redirect: {
-        destination: '/start-auth',
-        permanent: false,
-      },
-    }
-  }
+  // if (!code) {
+  //   return {
+  //     redirect: {
+  //       destination: '/start-auth',
+  //       permanent: false,
+  //     },
+  //   }
+  // }
 
 
 
