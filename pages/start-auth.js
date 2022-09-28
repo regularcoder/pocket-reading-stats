@@ -36,6 +36,7 @@ export async function getServerSideProps({ req, res }) {
   
   const oauth_response = await fetch(`https://getpocket.com/v3/oauth/request`, options);
 
+  console.log({ oauth_response });
   const data = await oauth_response.formData();
   const code = data.get('code');
 
