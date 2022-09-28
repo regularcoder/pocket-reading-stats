@@ -33,8 +33,9 @@ export async function getServerSideProps({ req, res }) {
   
   const oauth_response = await fetch(`https://getpocket.com/v3/oauth/authorize`, options);
 
-  const data = await oauth_response.formData();
-  const access_token = data.get('access_token');
+  const response_text = await oauth_response.text();
+  const response_params = new URLSearchParams(response_text);
+  const access_token = response_params.get('access_token');
 
   cookies.set('access-token', access_token);
   cookies.set('temp-auth-code');
