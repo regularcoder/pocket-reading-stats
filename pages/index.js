@@ -19,7 +19,7 @@ export default function Home({ list }) {
   useEffect(() => {
     let wordsInPeriod = 0;
 
-    Object.entries(list).forEach(([, value]) => {
+    list.forEach((value) => {
       wordsInPeriod += Number(value.word_count);
     });
 
@@ -28,7 +28,7 @@ export default function Home({ list }) {
 
 
   return (
-    <div className="m-5">
+    <div className="m-5 max-w-screen-xl">
       <Title>Reading statistics</Title>
       <Text>Statistics below are for the past 7 days</Text>
 
@@ -40,13 +40,15 @@ export default function Home({ list }) {
               <TableHead>
                 <TableRow>
                   <TableHeaderCell>Title</TableHeaderCell>
+                  <TableHeaderCell>Read on</TableHeaderCell>
                   <TableHeaderCell>Words</TableHeaderCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Object.entries(list).map(([key, value]) => {
+                {list.map(value => {
                   return <TableRow key={value.item_id}>
-                    <TableCell>{value.resolved_title || value.given_title}</TableCell>
+                    <TableCell><a href={value.resolved_url || value.given_url} target="_blank">{value.resolved_title || value.given_title}</a></TableCell>
+                    <TableCell>{new Date(value.time_read * 1000).toDateString()}</TableCell>
                     <TableCell>{value.word_count}</TableCell>
                   </TableRow>
                 })}
@@ -64,7 +66,7 @@ export default function Home({ list }) {
             </Card>
             <Card>
               <Text>Total articles read</Text>
-              <Metric>{Object.entries(list).length}</Metric>
+              <Metric>{list.length}</Metric>
             </Card>
           </Block>
         </Col>
@@ -109,7 +111,12 @@ export async function getServerSideProps({ req, res }) {
 
   const json_response = await oauth_response.json();
 
+  const list = Object
+    .entries(json_response.list)
+    .map(([, value]) => (value))
+    .sort((a, b) => b.time_read.localeCompare(a.time_read));
+
   return {
-    props: { list: json_response.list },
+    props: { list },
   }
 }
