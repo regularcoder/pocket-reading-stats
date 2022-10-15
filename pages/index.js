@@ -32,7 +32,7 @@ export default function Home({ list }) {
   useEffect(() => {
     const min_date = lastXDaysTimestamp(durationInDays);
     const updated_list = list.filter(a => a.time_read >= min_date);
-    
+
     setFilteredList(updated_list);
 
     let wordsInPeriod = 0;
@@ -45,62 +45,58 @@ export default function Home({ list }) {
   return (
     <div className="m-5 max-w-screen-xl">
       <Title>Reading statistics</Title>
-      <ColGrid numColsLg={6} gapX="gap-x-6" gapY="gap-y-6" marginTop="mt-6">
-        { /* Main section */}
-        <Col numColSpanLg={4}>
-          <Card hFull={true}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableHeaderCell>Title</TableHeaderCell>
-                  <TableHeaderCell>Read on</TableHeaderCell>
-                  <TableHeaderCell>Words</TableHeaderCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredList.map(value => {
-                  return <TableRow key={value.item_id}>
-                    <TableCell><a href={value.resolved_url || value.given_url} target="_blank">{value.resolved_title || value.given_title}</a></TableCell>
-                    <TableCell>{new Date(value.time_read * 1000).toDateString()}</TableCell>
-                    <TableCell>{value.word_count}</TableCell>
-                  </TableRow>
-                })}
-              </TableBody>
-            </Table>
-          </Card>
-        </Col>
+      <ColGrid numColsMd={2} numColsLg={3} gapX="gap-x-6" gapY="gap-y-6" marginTop="mt-6">
 
-        { /* KPI sidebar */}
-        <Col numColSpanLg={2}>
-          <Block spaceY="space-y-6">
-            <Card decorationColor='slate' decoration='top'>
-              <Text>Select duration</Text>
+        <Card decorationColor='slate' decoration='top'>
+          <Text>Select duration</Text>
 
-              <Dropdown
-                handleSelect={setDurationInDays}
-                marginTop="mt-2"
-                placeholder="Render mode"
-                defaultValue={7}
-              >
-                <DropdownItem
-                  value={7}
-                  text="7 days" />
-                <DropdownItem
-                  value={30}
-                  text="30 days" />
-              </Dropdown>
-            </Card>
-            <Card>
-              <Text>Total words read</Text>
-              <Metric>{wordsInWeek}</Metric>
-            </Card>
-            <Card>
-              <Text>Total articles read</Text>
-              <Metric>{filteredList.length}</Metric>
-            </Card>
-          </Block>
-        </Col>
+          <Dropdown
+            handleSelect={setDurationInDays}
+            marginTop="mt-2"
+            placeholder="Render mode"
+            defaultValue={7}
+          >
+            <DropdownItem
+              value={7}
+              text="7 days" />
+            <DropdownItem
+              value={30}
+              text="30 days" />
+          </Dropdown>
+        </Card>
+        <Card>
+          <Text>Total words read</Text>
+          <Metric>{wordsInWeek}</Metric>
+        </Card>
+        <Card>
+          <Text>Total articles read</Text>
+          <Metric>{filteredList.length}</Metric>
+        </Card>
       </ColGrid>
+
+      <Block marginTop="mt-6">
+        <Card>
+
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeaderCell>Title</TableHeaderCell>
+                <TableHeaderCell>Read on</TableHeaderCell>
+                <TableHeaderCell>Words</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredList.map(value => {
+                return <TableRow key={value.item_id}>
+                  <TableCell><a href={value.resolved_url || value.given_url} target="_blank">{value.resolved_title || value.given_title}</a></TableCell>
+                  <TableCell>{new Date(value.time_read * 1000).toDateString()}</TableCell>
+                  <TableCell>{value.word_count}</TableCell>
+                </TableRow>
+              })}
+            </TableBody>
+          </Table>
+        </Card>
+      </Block>
     </div>
   )
 }
