@@ -1,9 +1,21 @@
 import Cookies from 'cookies'
 import { useEffect, useState } from 'react'
+import {
+  Card, Text, Metric, Table,
+  TableHead,
+  TableRow,
+  TableHeaderCell,
+  TableBody,
+  TableCell,
+  Title,
+  ColGrid,
+  Col,
+  Block
+} from "@tremor/react";
 
 export default function Home({ list }) {
   const [wordsInWeek, setWordsInWeek] = useState(0);
-  
+
   useEffect(() => {
     let wordsInPeriod = 0;
 
@@ -16,32 +28,54 @@ export default function Home({ list }) {
 
 
   return (
-    <div>
-      <h2>Articles read in past 7 days</h2>
-      Total words: {wordsInWeek}<br/><br/>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Words</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(list).map(([key, value]) => {
-            return <tr key={value.item_id}>
-              <td>{value.resolved_title || value.given_title}</td>
-              <td>{value.word_count}</td>
-            </tr>
-          })}
-        </tbody>
-      </table>
+    <div className="m-5">
+      <Title>Reading statistics</Title>
+      <Text>Statistics below are for the past 7 days</Text>
+
+      <ColGrid numColsLg={6} gapX="gap-x-6" gapY="gap-y-6" marginTop="mt-6">
+        { /* Main section */}
+        <Col numColSpanLg={4}>
+          <Card hFull={true}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableHeaderCell>Title</TableHeaderCell>
+                  <TableHeaderCell>Words</TableHeaderCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Object.entries(list).map(([key, value]) => {
+                  return <TableRow key={value.item_id}>
+                    <TableCell>{value.resolved_title || value.given_title}</TableCell>
+                    <TableCell>{value.word_count}</TableCell>
+                  </TableRow>
+                })}
+              </TableBody>
+            </Table>
+          </Card>
+        </Col>
+
+        { /* KPI sidebar */}
+        <Col numColSpanLg={2}>
+          <Block spaceY="space-y-6">
+            <Card>
+              <Text>Total words read</Text>
+              <Metric>{wordsInWeek}</Metric>
+            </Card>
+            <Card>
+              <Text>Total articles read</Text>
+              <Metric>{Object.entries(list).length}</Metric>
+            </Card>
+          </Block>
+        </Col>
+      </ColGrid>
     </div>
   )
 }
 
 function lastWeek() {
   var today = new Date();
-  var nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+  var nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
   return Math.floor(nextweek.getTime() / 1000);
 }
 
